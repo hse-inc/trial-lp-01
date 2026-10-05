@@ -55,7 +55,7 @@
     });
   };
   addCue('#p1 .page__inner', 'p2', '02 CHECK', '次のページへ進む');
-  addCue('#p7 .page__inner', 'requirements', '09 募集要項', '募集要項へ進む');
+  addCue('#p7 .page__inner', 'company', '08 COMPANY', '次のページへ進む');
 
   // ---- 4P：カードの横送り（点と矢印。スワイプでも送れる） ----
   document.querySelectorAll('.route').forEach((route) => {
