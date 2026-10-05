@@ -630,3 +630,11 @@
 }
 .v-c .is-active .work__text--punch em { background-size: 100% 0.5em; }
 @media (prefers-reduced-motion: reduce) { .v-c .work__text--punch em { transition: none; background-size: 100% 0.5em; } }
+
+.v-c .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.v-c .page--hero { background: var(--color-brand); }
+.v-c .site-header { transition: color var(--dur-fast) var(--ease-out), background-color 260ms var(--ease-out); }
+.v-c .column[data-page="top"] .site-header { background: var(--color-brand); }
+.v-c .column[data-page="top"] .reticle, .v-c .column[data-page="top"] .pager, .v-c .column[data-page="top"] .scan { display: none; }
+.v-c .page--hero .hero__video { top: var(--header-h); height: calc(100% - var(--header-h)); }
+.v-c .page--hero .hero__video { object-position: 50% 25%; }

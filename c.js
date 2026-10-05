@@ -181,7 +181,8 @@
   const onActive = (page) => {
     if (page === active) return;
     active = page;
-    if (!reduce) {
+    column.dataset.page = page.id;
+    if (!reduce && page.id !== 'top') {
       scan.classList.remove('is-run'); void scan.offsetWidth; scan.classList.add('is-run');
       page.classList.add('is-jit'); setTimeout(() => page.classList.remove('is-jit'), 340);
     }
