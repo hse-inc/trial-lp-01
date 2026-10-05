@@ -1,0 +1,49 @@
+:root {
+  
+  --color-paper: #ffffff;
+  --color-brand: #333ca8;
+  --color-accent: #fff200;
+
+  
+  --color-brand-deep: oklch(27% 0.13 272);
+  --color-brand-soft: oklch(56% 0.16 272);
+  --color-paper-tint: oklch(96.5% 0.018 272);
+  --color-ink: oklch(22% 0.08 272);
+  --color-ink-soft: oklch(42% 0.07 272);
+  --color-line: oklch(40% 0.17 272 / 0.16);
+  --color-line-strong: oklch(40% 0.17 272 / 0.4);
+  --color-on-brand: #ffffff;
+  --color-on-brand-soft: oklch(100% 0 0 / 0.72);
+  --color-line-on-brand: oklch(100% 0 0 / 0.22);
+  --color-glitch-a: oklch(72% 0.19 330);
+  --color-glitch-b: oklch(82% 0.14 200);
+  --color-shade: oklch(18% 0.1 272 / 0.72);
+  --color-shade-0: oklch(18% 0.1 272 / 0);
+  --color-shadow: oklch(15% 0.1 272 / 0.45);
+
+  
+  --font-display: "Chakra Petch", "Zen Kaku Gothic New", sans-serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+
+  
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --col: 480px;
+  --header-h: 60px;
+
+  
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 160ms;
+  --dur-base: 520ms;
+}
