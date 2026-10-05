@@ -209,6 +209,23 @@
     });
   });
 
+  // ---- エントリー：タップした入力欄へ照準が移る ----
+  const fieldOf = (el) => el && el.closest && el.closest('.entry__f');
+  document.querySelectorAll('.entry').forEach((form) => {
+    const fields = [...form.querySelectorAll('.entry__f')];
+    form.addEventListener('focusin', (e) => {
+      const f = fieldOf(e.target);
+      if (!f) return;
+      clearInterval(tour);
+      fields.forEach((x) => x.classList.toggle('is-focus', x === f));
+      lockOn(f, fields.indexOf(f) + 1);
+    });
+    form.addEventListener('focusout', (e) => {
+      const f = fieldOf(e.target);
+      if (f && !f.contains(e.relatedTarget)) f.classList.remove('is-focus');
+    });
+  });
+
   // ---- 3P：仕事の流れ（タップで組み上がる見取り図） ----
   let planStart = () => {}, planStop = () => {};
   const plan = document.querySelector('.plan');
@@ -255,7 +272,12 @@
   const mo = new MutationObserver(() => { const p = pages.find((x) => x.classList.contains('is-active')); if (p) onActive(p); });
   pages.forEach((p) => mo.observe(p, { attributes: true, attributeFilter: ['class'] }));
   onActive(pages.find((x) => x.classList.contains('is-active')) || pages[0]);
-  window.addEventListener('resize', () => active && startTour(active));
+  // キーボードが開いて画面の大きさが変わっても、入力中の欄から照準を外さない
+  window.addEventListener('resize', () => {
+    const f = fieldOf(document.activeElement);
+    if (f) { clearInterval(tour); lockOn(f, [...f.parentNode.querySelectorAll('.entry__f')].indexOf(f) + 1); return; }
+    if (active) startTour(active);
+  });
 
   // ---- 録画表示 ----
   const t0 = performance.now();

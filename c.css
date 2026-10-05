@@ -900,3 +900,24 @@
 
 .v-c #p6 { color: var(--color-on-brand); }
 .v-c #p6 .meter__t, .v-c #p6 .grow__text, .v-c #p6 .grow__steps span:not(:nth-child(3)) { color: var(--color-on-brand); }
+
+.v-c .entry__f { position: relative; }
+.v-c .entry__l { transition: color var(--dur-fast) linear; }
+.v-c .entry__f.is-focus .entry__l { color: var(--color-accent); }
+.v-c .entry__f.is-focus input, .v-c .entry__f.is-focus textarea { border-color: var(--color-accent); background: oklch(100% 0 0 / 0.08); }
+.v-c .column[data-page="entry"] .reticle i { opacity: 1; }
+
+.v-c .req { flex: none; overflow: visible; padding-right: 0; -webkit-mask-image: none; mask-image: none; }
+.v-c .page--req .page__inner { padding-bottom: max(2.4em, 34px); }
+.v-c .page--req .page__inner::after { content: none; }
+.v-c .spec--req { padding-bottom: 0; }
+.v-c .spec--req .spec__row { padding: 0.5em 0; }
+.v-c .spec--req dt, .v-c .spec--req dd { line-height: 1.6; }
+.v-c .spec--req .spec__num { font-size: 1.32em; line-height: 1.2; }
+.v-c .perks { display: flex; flex-wrap: wrap; gap: 0.15em 1em; }
+.v-c .perks > li { padding-left: 0.8em; }
+.v-c .perks > li::before { top: 0.62em; width: 0.32em; height: 0.32em; }
+.v-c .perks > li:has(.perks__sub) { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3em; }
+.v-c .perks__sub { margin: 0; gap: 0.25em; }
+.v-c .perks__sub li { font-size: 0.86em; line-height: 1.6; padding: 0 0.4em; }
+.v-c .entry input:focus-visible, .v-c .entry textarea:focus-visible { outline: none; box-shadow: none; }
