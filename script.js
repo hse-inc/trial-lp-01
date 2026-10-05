@@ -37,19 +37,24 @@
   activate(0);
 
   // 読み込み直後や素早い操作で表示がずれないよう、スクロール位置からも現在ページを合わせる
+  // 高さが0と測られる瞬間（読み込み直後・画面サイズの切替中）は合わせない
+  const indexFromScroll = () => {
+    if (!slider.clientHeight) return null;
+    return Math.max(0, Math.min(pages.length - 1, Math.round(slider.scrollTop / slider.clientHeight)));
+  };
   let syncing = false;
   slider.addEventListener('scroll', () => {
     if (syncing) return;
     syncing = true;
     requestAnimationFrame(() => {
-      const i = Math.max(0, Math.min(pages.length - 1, Math.round(slider.scrollTop / slider.clientHeight)));
-      if (i !== current) activate(i);
       syncing = false;
+      const i = indexFromScroll();
+      if (i !== null && i !== current) activate(i);
     });
   }, { passive: true });
   window.addEventListener('load', () => {
-    const i = Math.max(0, Math.min(pages.length - 1, Math.round(slider.scrollTop / slider.clientHeight)));
-    if (i !== current) activate(i);
+    const i = indexFromScroll();
+    if (i !== null && i !== current) activate(i);
   });
 
   const go = (index) => {
@@ -67,6 +72,8 @@
   window.addEventListener('wheel', (e) => {
     if (e.ctrlKey) return;
     if (canScrollInside(e.target, e.deltaY)) return;
+    // 横スクロールのカード上での横方向の操作はそのまま通す
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && e.target.closest && e.target.closest('.route__track')) return;
     e.preventDefault();
     if (locked) return;
     // 小さな動きは足し合わせ、一定量を超えたら1ページ送る

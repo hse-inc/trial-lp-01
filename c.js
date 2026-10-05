@@ -14,7 +14,7 @@
 
   // ---- めくれ上がる文字ブロック（行の長さに沿った輪郭＋下に残るグラデーション面） ----
   const NS = 'http://www.w3.org/2000/svg';
-  const PEEL = '.intro__text .grp:not(.intro__both), .intro__close, .fit__hit, .fit__voices, .work__lead, .work__close';
+  const PEEL = '.intro__text .grp:not(.intro__both), .intro__close, .fit__hit, .fit__voices, .work__lead, .work__close, .bal__close, .grow__close, .fut__close';
   const peels = [...document.querySelectorAll(PEEL)];
   peels.forEach((g, k) => {
     g.classList.add('peel');
@@ -37,22 +37,84 @@
     g.append(under, top);
   });
   // ---- 次のページへ誘う仕掛け（1P：締めの一文から配線が伸びて次ページの札につながる） ----
-  const cueHost = document.querySelector('#p1 .page__inner');
-  if (cueHost) {
+  const addCue = (hostSel, to, name, label) => {
+    const cueHost = document.querySelector(hostSel);
+    if (!cueHost) return;
     const cue = document.createElement('a');
     cue.className = 'nextcue';
-    cue.href = '#p2';
+    cue.href = '#' + to;
     cue.dataset.t = '';
-    cue.setAttribute('aria-label', '次のページへ進む');
+    cue.setAttribute('aria-label', label);
     cue.innerHTML = '<svg class="nextcue__wire" viewBox="0 0 64 46" aria-hidden="true"><path class="nextcue__line" d="M14 0V32H56"/><path class="nextcue__pulse" pathLength="1" d="M14 0V32H56"/></svg>'
       + '<span class="nextcue__chip" aria-hidden="true"><svg class="nextcue__box" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="13" height="13"/><path pathLength="1" d="M4 8.2 7 11l5.2-6.2"/></svg>'
-      + '<span class="nextcue__next">NEXT</span><b>02 CHECK</b><i></i></span>';
+      + '<span class="nextcue__next">NEXT</span><b>' + name + '</b><i></i></span>';
     cueHost.appendChild(cue);
     cue.addEventListener('click', (e) => {
       e.preventDefault();
-      document.getElementById('p2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById(to).scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-  }
+  };
+  addCue('#p1 .page__inner', 'p2', '02 CHECK', '次のページへ進む');
+  addCue('#p7 .page__inner', 'requirements', '09 募集要項', '募集要項へ進む');
+
+  // ---- 4P：カードの横送り（点と矢印。スワイプでも送れる） ----
+  document.querySelectorAll('.route').forEach((route) => {
+    const track = route.querySelector('.route__track');
+    const cards = [...track.children];
+    const nav = document.createElement('div');
+    nav.className = 'route__nav';
+    nav.innerHTML = '<button class="route__arrow route__arrow--prev" type="button" aria-label="前のカード"></button>'
+      + '<span class="route__count" aria-hidden="true"><b>01</b> / ' + String(cards.length).padStart(2, '0') + '</span>'
+      + '<span class="route__dots" aria-hidden="true">' + cards.map(() => '<i></i>').join('') + '</span>'
+      + '<button class="route__arrow route__arrow--next" type="button" aria-label="次のカード"></button>';
+    route.appendChild(nav);
+    const dots = [...nav.querySelectorAll('.route__dots i')];
+    const num = nav.querySelector('.route__count b');
+    const prev = nav.querySelector('.route__arrow--prev');
+    const next = nav.querySelector('.route__arrow--next');
+    let idx = -1;
+    const set = (i) => {
+      if (i === idx) return;
+      idx = i;
+      cards.forEach((c, k) => c.classList.toggle('is-now', k === i));
+      dots.forEach((d, k) => d.classList.toggle('is-now', k === i));
+      num.textContent = String(i + 1).padStart(2, '0');
+      prev.disabled = i === 0;
+      next.disabled = i === cards.length - 1;
+      route.classList.toggle('is-last', i === cards.length - 1);
+    };
+    const goCard = (i) => track.scrollTo({ left: cards[i].offsetLeft - cards[0].offsetLeft, behavior: reduce ? 'auto' : 'smooth' });
+    prev.addEventListener('click', () => goCard(Math.max(0, idx - 1)));
+    next.addEventListener('click', () => goCard(Math.min(cards.length - 1, idx + 1)));
+    track.addEventListener('scroll', () => {
+      const x = track.scrollLeft;
+      let best = 0;
+      cards.forEach((c, k) => { if (Math.abs(c.offsetLeft - cards[0].offsetLeft - x) < Math.abs(cards[best].offsetLeft - cards[0].offsetLeft - x)) best = k; });
+      set(best);
+    }, { passive: true });
+    set(0);
+  });
+
+  // ---- 募集要項：下端まで読んだら下のぼかしを外す ----
+  document.querySelectorAll('.req').forEach((box) => {
+    const end = () => box.classList.toggle('is-end', box.scrollTop + box.clientHeight >= box.scrollHeight - 4);
+    box.addEventListener('scroll', end, { passive: true });
+    window.addEventListener('resize', end);
+    end();
+  });
+
+  // ---- エントリー：トライアルのため送信しない ----
+  document.querySelectorAll('.entry').forEach((form) => {
+    const msg = form.querySelector('.entry__msg');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const miss = [...form.querySelectorAll('[required]')].filter((el) => !el.value.trim());
+      form.querySelectorAll('.entry__f').forEach((f) => f.classList.remove('is-miss'));
+      miss.forEach((el) => el.closest('.entry__f').classList.add('is-miss'));
+      msg.textContent = miss.length ? '必須の項目を入力してください。' : 'トライアル版のため、送信は行われません。';
+      if (miss.length) miss[0].focus();
+    });
+  });
 
   const shapePeels = () => {
     peels.forEach((g) => {
