@@ -897,3 +897,6 @@
   .v-c .fut__close { margin-top: 2em; }
   .v-c .mascot--fut { top: calc(var(--header-h) + 9.6em); width: 5.8em; }
 }
+
+.v-c #p6 { color: var(--color-on-brand); }
+.v-c #p6 .meter__t, .v-c #p6 .grow__text, .v-c #p6 .grow__steps span:not(:nth-child(3)) { color: var(--color-on-brand); }
